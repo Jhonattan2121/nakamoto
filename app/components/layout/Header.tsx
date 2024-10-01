@@ -1,10 +1,8 @@
 'use client';
-import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, HStack, IconButton, Image, Link, Text, useColorMode, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, Image, Link, useColorMode, VStack } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import SubmissionModal from '../modal/SubmissionModal';
-
 export default function Header() {
     const { colorMode } = useColorMode();
     const [modalDisplayed, setModalDisplayed] = useState(false);
@@ -31,8 +29,8 @@ export default function Header() {
     return (
         <Box bg="background" px={4} py={4} borderBottom="1px solid" borderColor="primary">
             <Flex justify="space-between" align="center" wrap="wrap">
-                <HStack as={NextLink} href='/' spacing={2} cursor="pointer">
-                    <Image src="/burnHead.svg" alt="Nakamoto" boxSize="60px" />
+                <Image src="/burnHead.svg" alt="Nakamoto" boxSize="60px" />
+                {/* <HStack as={NextLink} href='/' spacing={2} cursor="pointer">
                     <Text fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold">
                         Nakamoto
                     </Text>
@@ -58,7 +56,7 @@ export default function Header() {
                             Rules
                         </Link>
                     </HStack>
-                )}
+                )} */}
 
                 <Button
                     onClick={() => setModalDisplayed(true)}
