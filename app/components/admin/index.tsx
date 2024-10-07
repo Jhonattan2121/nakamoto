@@ -10,6 +10,7 @@ import {
     HStack,
     Image,
     Input,
+    Select,
     Spinner,
     Text,
     Textarea,
@@ -25,25 +26,29 @@ interface Post {
 }
 
 interface Product {
-    name: string;
-    description: string;
-    price: number;
+    STAMP_Asset: string;
+    Top: number;
+    Rarity_TItle: string;
+    Rarity_Score: number;
     imageUrls: string[];
-    stock: number;
-    category: string;
-    created: string;
 }
+
 
 export default function Admin() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [newPost, setNewPost] = useState<Post>({ title: '', body: '', author: '', created: new Date().toISOString() });
-    const [newProduct, setNewProduct] = useState<Product>({ name: '', description: '', category: "", price: 0, imageUrls: [], stock: 0, created: new Date().toISOString() });
+    const [newProduct, setNewProduct] = useState<Product>({
+        STAMP_Asset: '',
+        Top: 0,
+        Rarity_TItle: '',
+        Rarity_Score: 0,
+        imageUrls: [],
+    });
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [currentSection, setCurrentSection] = useState<'posts' | 'products'>('posts'); // Novo estado
 
-    // Placeholder image URL
     const placeholderImage = "https://via.placeholder.com/150";
 
     useEffect(() => {
@@ -75,21 +80,53 @@ export default function Admin() {
 
     const handleProductSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const imageUrls = imageFile ? await uploadImage(imageFile) : [];
 
-        const { data } = await supabaseAdmin.from('products').insert([{ ...newProduct, imageUrls }]);
-        if (data) {
-            setProducts(prev => [...prev, ...data]);
+        // Obtém URLs da imagem se um arquivo foi selecionado
+        const imageUrls = imageFile ? await uploadImage(imageFile) : []; // Se não houver arquivo, retorna um array vazio
+
+        // Realiza a inserção no Supabase
+        const { data, error } = await supabaseAdmin
+            .from('products')
+            .insert([{
+                STAMP_Asset: newProduct.STAMP_Asset,
+                Top: newProduct.Top,
+                Rarity_TItle: newProduct.Rarity_TItle,
+                Rarity_Score: newProduct.Rarity_Score,
+                imageUrls: imageUrls // Isso deve ser sempre um array, nunca null
+            }]);
+
+        // Verifica se houve erro na inserção
+        if (error) {
+            console.error('Supabase insert error:', error.message);
+        } else {
+            // Se a inserção foi bem-sucedida, atualiza o estado dos produtos
+            setProducts(prev => [...prev, ...(data || [])]); // Garante que estamos lidando com um array
         }
 
-        setNewProduct({ name: '', description: '', category: "", price: 0, imageUrls: [], stock: 0, created: new Date().toISOString() });
+        // Reinicializa o formulário
+        setNewProduct({ STAMP_Asset: '', Top: 0, Rarity_TItle: "", Rarity_Score: 0, imageUrls: [] });
         setImageFile(null);
     };
 
+
+
+
+
+
     const uploadImage = async (file: File): Promise<string[]> => {
-        const { data: uploadData } = await supabaseAdmin.storage.from('images').upload(`public/${file.name}`, file);
+        const { data: uploadData, error } = await supabaseAdmin.storage.from('images').upload(`public/${file.name}`, file);
+
+        // Verifica se ocorreu um erro
+        if (error) {
+            console.error('Image upload error:', error.message);
+            return []; // Retorna um array vazio em caso de erro
+        }
+
+        // Verifica se o upload foi bem-sucedido e retorna um array com a URL
         return uploadData?.path ? [supabaseAdmin.storage.from('images').getPublicUrl(uploadData.path).data.publicUrl] : [];
     };
+
+
 
     return (
         <Box bg="#0a0e0b" color="white" minH="100vh" p={5}>
@@ -167,52 +204,52 @@ export default function Admin() {
                                 <Heading size="lg" mb={4} textAlign="center" color="teal.400">Create Product</Heading>
                                 <form onSubmit={handleProductSubmit}>
                                     <FormControl mb={4}>
-                                        <FormLabel>Product Name</FormLabel>
                                         <Input
-                                            value={newProduct.name}
-                                            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-                                            placeholder="Product Name"
+                                            type='text'
+                                            value={newProduct.STAMP_Asset}
+                                            onChange={(e) => setNewProduct({ ...newProduct, STAMP_Asset: e.target.value })}
+                                            placeholder="Product Stamp"
                                             required
                                             bg="gray.700"
                                             color="white"
                                         />
                                     </FormControl>
                                     <FormControl mb={4}>
-                                        <FormLabel>Description</FormLabel>
-                                        <Input
-                                            value={newProduct.description}
-                                            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-                                            placeholder="Product Description"
-                                            required
-                                            bg="gray.700"
-                                            color="white"
-                                        />
-                                    </FormControl>
-                                    <FormControl mb={4}>
-                                        <FormLabel>Category</FormLabel>
-                                        <Input
-                                            value={newProduct.category}
-                                            onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-                                            placeholder="Product Category"
-                                            required
-                                            bg="gray.700"
-                                            color="white"
-                                        />
-                                    </FormControl>
-                                    <FormControl mb={4}>
-                                        <FormLabel>Price</FormLabel>
                                         <Input
                                             type="number"
-                                            value={newProduct.price}
-                                            onChange={(e) => setNewProduct({ ...newProduct, price: Number(e.target.value) })}
-                                            placeholder="Product Price"
+                                            value={newProduct.Rarity_Score}
+                                            onChange={(e) => setNewProduct({ ...newProduct, Rarity_Score: Number(e.target.value) })}
+                                            placeholder="Product Rarity Score"
                                             required
                                             bg="gray.700"
                                             color="white"
                                         />
                                     </FormControl>
                                     <FormControl mb={4}>
-                                        <FormLabel>Upload Image</FormLabel>
+                                        <Select
+                                            value={newProduct.Rarity_TItle}
+                                            onChange={(e) => setNewProduct({ ...newProduct, Rarity_TItle: e.target.value })}
+                                            required
+
+                                        >
+                                            <option value="Common" style={{ background: '#2d3748', color: 'white' }}>Common</option>
+                                            <option value="Rare" style={{ background: '#2d3748', color: 'white' }}>Rare</option>
+                                            <option value="Epic" style={{ background: '#2d3748', color: 'white' }}>Epic</option>
+                                            <option value="Legendary" style={{ background: '#2d3748', color: 'white' }}>Legendary</option>
+                                        </Select>
+                                    </FormControl>
+                                    <FormControl mb={4}>
+                                        <Input
+                                            type="number"
+                                            value={newProduct.Top}
+                                            onChange={(e) => setNewProduct({ ...newProduct, Top: Number(e.target.value) })}
+                                            placeholder="Product Top"
+                                            required
+                                            bg="gray.700"
+                                            color="white"
+                                        />
+                                    </FormControl>
+                                    <FormControl mb={4}>
                                         <Input
                                             type="file"
                                             accept="image/*"
@@ -221,18 +258,7 @@ export default function Admin() {
                                             color="white"
                                         />
                                     </FormControl>
-                                    <FormControl mb={4}>
-                                        <FormLabel>Stock</FormLabel>
-                                        <Input
-                                            type="number"
-                                            value={newProduct.stock}
-                                            onChange={(e) => setNewProduct({ ...newProduct, stock: Number(e.target.value) })}
-                                            placeholder="Quantity in Stock"
-                                            required
-                                            bg="gray.700"
-                                            color="white"
-                                        />
-                                    </FormControl>
+
                                     <Button type="submit" colorScheme="teal" width="100%">Submit Product</Button>
                                 </form>
 
@@ -241,7 +267,7 @@ export default function Admin() {
                                 <VStack spacing={6} align="stretch">
                                     {products.map((product) => (
                                         <Box
-                                            key={`${product.name}-${product.created}`}
+                                            key={product.STAMP_Asset}
                                             bg="gray.800"
                                             p={5}
                                             borderRadius="lg"
@@ -251,18 +277,17 @@ export default function Admin() {
                                         >
                                             <HStack spacing={4} alignItems="flex-start">
                                                 <Image
-                                                    src={product.imageUrls[0] || placeholderImage}
-                                                    alt={product.name}
+                                                    src={product.imageUrls.length > 0 ? product.imageUrls[0] : placeholderImage} // Verifica se há imagens
+                                                    alt={product.STAMP_Asset}
                                                     boxSize="150px"
                                                     objectFit="cover"
                                                     borderRadius="md"
                                                 />
                                                 <Box>
-                                                    <Text fontSize="xl" fontWeight="bold" color="teal.300">{product.name}</Text>
-                                                    <Text>Description: {product.description}</Text>
-                                                    <Text>Category: {product.category}</Text>
-                                                    <Text>Price: $ {product.price.toFixed(2)}</Text>
-                                                    <Text>Stock: {product.stock}</Text>
+                                                    <Text fontSize="xl" fontWeight="bold" color="teal.300">Stamp {product.STAMP_Asset}</Text>
+                                                    <Text> Top {product.Top}</Text>
+                                                    <Text> Rarity Score{product.Rarity_Score}</Text>
+                                                    <Text> Rarity Title {product.Rarity_TItle}</Text>
                                                 </Box>
                                             </HStack>
                                         </Box>
