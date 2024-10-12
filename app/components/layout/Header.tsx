@@ -1,35 +1,32 @@
 'use client';
-import { Box, Button, Flex, Image, Link, useColorMode, VStack } from '@chakra-ui/react';
-import NextLink from 'next/link';
-import { useEffect, useState } from 'react';
-import SubmissionModal from '../modal/SubmissionModal';
+import { Box, Flex, Image } from '@chakra-ui/react';
 export default function Header() {
-    const { colorMode } = useColorMode();
-    const [modalDisplayed, setModalDisplayed] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    // const { colorMode } = useColorMode();
+    // const [modalDisplayed, setModalDisplayed] = useState(false);
+    // const [isMobile, setIsMobile] = useState(false);
+    // const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobile(window.innerWidth < 768);
-        };
+    // useEffect(() => {
+    //     const handleResize = () => {
+    //         setIsMobile(window.innerWidth < 768);
+    //     };
 
-        handleResize();
-        window.addEventListener('resize', handleResize);
+    //     handleResize();
+    //     window.addEventListener('resize', handleResize);
 
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+    //     return () => {
+    //         window.removeEventListener('resize', handleResize);
+    //     };
+    // }, []);
 
-    const handleMenuToggle = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
+    // const handleMenuToggle = () => {
+    //     setIsMenuOpen(!isMenuOpen);
+    // };
 
     return (
         <Box bg="background" px={4} py={4} borderBottom="1px solid" borderColor="primary">
-            <Flex justify="space-between" align="center" wrap="wrap">
-                <Image src="/burnHead.svg" alt="Nakamoto" boxSize="60px" />
+            <Flex justify="center" align="center" >
+                <Image src="/burnHead.svg" alt="Nakamoto" boxSize="100px" />
                 {/* <HStack as={NextLink} href='/' spacing={2} cursor="pointer">
                     <Text fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold">
                         Nakamoto
@@ -58,7 +55,7 @@ export default function Header() {
                     </HStack>
                 )} */}
 
-                <Button
+                {/* <Button
                     onClick={() => setModalDisplayed(true)}
                     variant="solid"
                     colorScheme="teal"
@@ -67,10 +64,10 @@ export default function Header() {
                     _hover={{ bg: 'teal.600' }}
                 >
                     Submit
-                </Button>
+                </Button> */}
             </Flex>
 
-            {isMenuOpen && isMobile && (
+            {/* {isMenuOpen && isMobile && (
                 <VStack
                     spacing={4}
                     mt={4}
@@ -92,9 +89,9 @@ export default function Header() {
                         Rules
                     </Link>
                 </VStack>
-            )}
+            )} */}
 
-            <SubmissionModal isOpen={modalDisplayed} onClose={() => setModalDisplayed(false)} />
+            {/* <SubmissionModal isOpen={modalDisplayed} onClose={() => setModalDisplayed(false)} /> */}
         </Box>
     );
 }
