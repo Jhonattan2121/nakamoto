@@ -30,9 +30,9 @@ interface Product {
     Rarity_TItle: string;
     Rarity_Score: number;
     imageUrls: string[];
-    epoch_name: string; 
+    epoch_name: string;
     epoch_index: string;
-    Creator_Name: string;       
+    Creator_Name: string;
 }
 
 interface Epoch {
@@ -43,7 +43,7 @@ interface Epoch {
 export default function Admin() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
-    const [epochs, setEpochs] = useState<Epoch[]>([]); 
+    const [epochs, setEpochs] = useState<Epoch[]>([]);
     const [loading, setLoading] = useState(true);
     const [newPost, setNewPost] = useState<Post>({ title: '', body: '', author: '', created: new Date().toISOString() });
     const [newProduct, setNewProduct] = useState<Product>({
@@ -57,20 +57,22 @@ export default function Admin() {
         epoch_index: '',
 
     });
+    const [raritys, setRaritys] = useState<string[]>([]);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [currentSection, setCurrentSection] = useState<'posts' | 'products'>('posts');
-    const [isAuthenticated, setIsAuthenticated] = useState(false); 
-    const [username, setUsername] = useState(''); 
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const placeholderImage = "https://via.placeholder.com/150";
 
     useEffect(() => {
         const fetchData = async () => {
-            const [{ data: postsData }, { data: productsData }, { data: epochsData }] = await Promise.all([
+            const [{ data: postsData }, { data: productsData }, { data: epochsData }, { data: raritysData }] = await Promise.all([
                 supabaseAdmin.from('posts').select('*'),
                 supabaseAdmin.from('products').select('*'),
                 supabaseAdmin.from('epochs').select('*'),
+                supabaseAdmin.from('raritys').select('title'),
             ]);
 
             setPosts(postsData || []);
@@ -79,6 +81,7 @@ export default function Admin() {
                 imageUrls: Array.isArray(product.imageUrls) ? product.imageUrls : product.imageUrls ? product.imageUrls.split(', ') : []
             })) || []);
             setEpochs(epochsData || []);
+            setRaritys(raritysData?.map(rarity => rarity.title) || []);
             setLoading(false);
         };
 
@@ -103,7 +106,7 @@ export default function Admin() {
             .from('products')
             .insert([{
                 STAMP_Asset: newProduct.STAMP_Asset,
-                Creator_Name: newProduct.Creator_Name,  
+                Creator_Name: newProduct.Creator_Name,
                 Top: newProduct.Top,
                 Rarity_TItle: newProduct.Rarity_TItle,
                 Rarity_Score: newProduct.Rarity_Score,
@@ -149,7 +152,7 @@ export default function Admin() {
         e.preventDefault();
 
         const { data, error } = await supabaseAdmin.auth.signInWithPassword({
-            email: username, 
+            email: username,
             password: password,
         });
 
@@ -215,10 +218,10 @@ export default function Admin() {
                             onClick={handleLogout}
                             colorScheme="red"
                             mb={4}
-                            size="lg" 
+                            size="lg"
                             leftIcon={<FaSignOutAlt />}
                             borderRadius="md"
-                            boxShadow="md" 
+                            boxShadow="md"
                             _hover={{ bg: "red.600", transform: "scale(1.05)", transition: "0.2s" }}
                         >
                             Logout
@@ -273,14 +276,17 @@ export default function Admin() {
                                                 <Select
                                                     value={newProduct.Rarity_TItle}
                                                     onChange={(e) => setNewProduct({ ...newProduct, Rarity_TItle: e.target.value })}
+                                                    placeholder="Select Rarity"
                                                     required
                                                 >
-                                                    <option value="Common" style={{ background: '#2d3748', color: 'white' }}>Common</option>
-                                                    <option value="Rare" style={{ background: '#2d3748', color: 'white' }}>Rare</option>
-                                                    <option value="Epic" style={{ background: '#2d3748', color: 'white' }}>Epic</option>
-                                                    <option value="Legendary" style={{ background: '#2d3748', color: 'white' }}>Legendary</option>
+                                                    {raritys.map((rarity) => (
+                                                        <option key={rarity} value={rarity} style={{ background: '#2d3748', color: 'white' }}>
+                                                            {rarity}
+                                                        </option>
+                                                    ))}
                                                 </Select>
                                             </FormControl>
+
                                             <FormControl mb={4}>
                                                 <Select
                                                     value={newProduct.epoch_name}
