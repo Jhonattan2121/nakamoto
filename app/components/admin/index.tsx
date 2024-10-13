@@ -27,7 +27,7 @@ interface Post {
 interface Product {
     STAMP_Asset: string;
     Top: number;
-    Rarity_TItle: string;
+    Title: string;
     Rarity_Score: number;
     imageUrls: string[];
     epoch_name: string;
@@ -50,7 +50,7 @@ export default function Admin() {
         STAMP_Asset: '',
         Creator_Name: "",
         Top: 0,
-        Rarity_TItle: '',
+        Title: '',
         Rarity_Score: 0,
         imageUrls: [],
         epoch_name: '',
@@ -108,7 +108,7 @@ export default function Admin() {
                 STAMP_Asset: newProduct.STAMP_Asset,
                 Creator_Name: newProduct.Creator_Name,
                 Top: newProduct.Top,
-                Rarity_TItle: newProduct.Rarity_TItle,
+                Title: newProduct.Title,
                 Rarity_Score: newProduct.Rarity_Score,
                 imageUrls: imageUrls,
                 epoch_name: newProduct.epoch_name,
@@ -121,7 +121,7 @@ export default function Admin() {
             setProducts(prev => [...prev, ...(data || [])]);
         }
 
-        setNewProduct({ STAMP_Asset: '', Creator_Name: "", Top: 0, Rarity_TItle: "", Rarity_Score: 0, imageUrls: [], epoch_name: '', epoch_index: '' });
+        setNewProduct({ STAMP_Asset: '', Creator_Name: "", Top: 0, Title: "", Rarity_Score: 0, imageUrls: [], epoch_name: '', epoch_index: '' });
         setImageFile(null);
     };
 
@@ -274,8 +274,8 @@ export default function Admin() {
                                             </FormControl>
                                             <FormControl mb={4}>
                                                 <Select
-                                                    value={newProduct.Rarity_TItle}
-                                                    onChange={(e) => setNewProduct({ ...newProduct, Rarity_TItle: e.target.value })}
+                                                    value={newProduct.Title}
+                                                    onChange={(e) => setNewProduct({ ...newProduct, Title: e.target.value })}
                                                     placeholder="Select Rarity"
                                                     required
                                                 >
@@ -365,7 +365,7 @@ export default function Admin() {
                                                             <Text>Creator {product.Creator_Name}</Text>
                                                             <Text>Top {product.Top}</Text>
                                                             <Text>Rarity Score {product.Rarity_Score}</Text>
-                                                            <Text>Rarity Title {product.Rarity_TItle}</Text>
+                                                            <Text>Rarity Title {product.Title}</Text>
                                                             <Text>Epoch {product.epoch_name}</Text>
                                                             <Text>Index {product.epoch_index}</Text>
                                                         </Box>
