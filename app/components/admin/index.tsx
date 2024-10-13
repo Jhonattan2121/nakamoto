@@ -31,7 +31,8 @@ interface Product {
     Rarity_Score: number;
     imageUrls: string[];
     epoch_name: string; 
-    epoch_index: string;       
+    epoch_index: string;
+    Creator_Name: string;       
 }
 
 interface Epoch {
@@ -47,12 +48,14 @@ export default function Admin() {
     const [newPost, setNewPost] = useState<Post>({ title: '', body: '', author: '', created: new Date().toISOString() });
     const [newProduct, setNewProduct] = useState<Product>({
         STAMP_Asset: '',
+        Creator_Name: "",
         Top: 0,
         Rarity_TItle: '',
         Rarity_Score: 0,
         imageUrls: [],
         epoch_name: '',
         epoch_index: '',
+
     });
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [currentSection, setCurrentSection] = useState<'posts' | 'products'>('posts');
@@ -100,6 +103,7 @@ export default function Admin() {
             .from('products')
             .insert([{
                 STAMP_Asset: newProduct.STAMP_Asset,
+                Creator_Name: newProduct.Creator_Name,  
                 Top: newProduct.Top,
                 Rarity_TItle: newProduct.Rarity_TItle,
                 Rarity_Score: newProduct.Rarity_Score,
@@ -114,7 +118,7 @@ export default function Admin() {
             setProducts(prev => [...prev, ...(data || [])]);
         }
 
-        setNewProduct({ STAMP_Asset: '', Top: 0, Rarity_TItle: "", Rarity_Score: 0, imageUrls: [], epoch_name: '', epoch_index: '' });
+        setNewProduct({ STAMP_Asset: '', Creator_Name: "", Top: 0, Rarity_TItle: "", Rarity_Score: 0, imageUrls: [], epoch_name: '', epoch_index: '' });
         setImageFile(null);
     };
 
@@ -245,6 +249,17 @@ export default function Admin() {
                                             </FormControl>
                                             <FormControl mb={4}>
                                                 <Input
+                                                    type='text'
+                                                    value={newProduct.Creator_Name}
+                                                    onChange={(e) => setNewProduct({ ...newProduct, Creator_Name: e.target.value })}
+                                                    placeholder="Creator Name"
+                                                    required
+                                                    bg="gray.700"
+                                                    color="white"
+                                                />
+                                            </FormControl>
+                                            <FormControl mb={4}>
+                                                <Input
                                                     type="number"
                                                     value={newProduct.Rarity_Score}
                                                     onChange={(e) => setNewProduct({ ...newProduct, Rarity_Score: Number(e.target.value) })}
@@ -341,6 +356,7 @@ export default function Admin() {
                                                         />
                                                         <Box>
                                                             <Text fontSize="xl" fontWeight="bold" color="teal.300">Stamp {product.STAMP_Asset}</Text>
+                                                            <Text>Creator {product.Creator_Name}</Text>
                                                             <Text>Top {product.Top}</Text>
                                                             <Text>Rarity Score {product.Rarity_Score}</Text>
                                                             <Text>Rarity Title {product.Rarity_TItle}</Text>
