@@ -195,12 +195,12 @@ const SubmitFormModal: React.FC<SubmitFormModalProps> = ({ isOpen, onClose }) =>
                                                     setFormData({
                                                         ...formData,
                                                         stampId: product.STAMP_Asset,
-                                                        artist: product.artist, 
+                                                        artist: product.Creator_Name, 
                                                     });
                                                     setProductSuggestions([]); 
                                                 }}
                                             >
-                                                {product.STAMP_Asset} - {product.name}
+                                                {product.STAMP_Asset} - {product.Creator_Name}
                                             </Text>
                                         ))}
                                     </VStack>
