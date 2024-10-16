@@ -17,12 +17,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import { FaSignOutAlt } from 'react-icons/fa';
 
-interface Post {
-    title: string;
-    body: string;
-    author: string;
-    created: string;
-}
 
 interface Product {
     STAMP_Asset: string;
@@ -40,12 +34,20 @@ interface Epoch {
     indices: string[];
 }
 
+interface Stamp {
+    stampId: string;
+    stampUrl: string[];
+    artist: string;
+    email: string;
+    socialMediaHandle: string;
+    description: string;
+}
+
+
 export default function Admin() {
-    const [posts, setPosts] = useState<Post[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [epochs, setEpochs] = useState<Epoch[]>([]);
     const [loading, setLoading] = useState(true);
-    const [newPost, setNewPost] = useState<Post>({ title: '', body: '', author: '', created: new Date().toISOString() });
     const [newProduct, setNewProduct] = useState<Product>({
         STAMP_Asset: '',
         Creator_Name: "",
@@ -57,45 +59,53 @@ export default function Admin() {
         epoch_index: '',
 
     });
+   
     const [raritys, setRaritys] = useState<string[]>([]);
     const [imageFile, setImageFile] = useState<File | null>(null);
-    const [currentSection, setCurrentSection] = useState<'posts' | 'products'>('posts');
+    const [currentSection, setCurrentSection] = useState<'Stamps Submit' | 'products'>('Stamps Submit');
+    const [stamps, setStamps] = useState<Stamp[]>([]);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const placeholderImage = "https://via.placeholder.com/150";
 
+    const fetchData = async () => {
+        const [ { data: productsData }, { data: epochsData }, { data: raritysData }, { data: stampsData }] = await Promise.all([
+            supabaseAdmin.from('products').select('*'),
+            supabaseAdmin.from('epochs').select('*'),
+            supabaseAdmin.from('raritys').select('title'),
+            supabaseAdmin.from('stamps').select('*'), 
+        ]);
+    
+        console.log('Stamps Data:', stampsData);
+    
+        setProducts(productsData?.map(product => ({
+            ...product,
+            imageUrls: Array.isArray(product.imageUrls) ? product.imageUrls : product.imageUrls ? product.imageUrls.split(', ') : []
+        })) || []);
+        setEpochs(epochsData || []);
+        setRaritys(raritysData?.map(rarity => rarity.title) || []);
+    
+        const formattedStamps = stampsData?.map(stamp => ({
+            ...stamp,
+            stampUrl: Array.isArray(stamp.stampUrl) 
+            ? stamp.stampUrl 
+            : typeof stamp.stampUrl === 'string' 
+                ? (stamp.stampUrl.trim().startsWith('[') ? JSON.parse(stamp.stampUrl) : [stamp.stampUrl]) 
+                : []
+                })) || [];
+    
+        console.log('Formatted Stamps:', formattedStamps);
+        setStamps(formattedStamps);
+        setLoading(false);
+    };
     useEffect(() => {
-        const fetchData = async () => {
-            const [{ data: postsData }, { data: productsData }, { data: epochsData }, { data: raritysData }] = await Promise.all([
-                supabaseAdmin.from('posts').select('*'),
-                supabaseAdmin.from('products').select('*'),
-                supabaseAdmin.from('epochs').select('*'),
-                supabaseAdmin.from('raritys').select('title'),
-            ]);
-
-            setPosts(postsData || []);
-            setProducts(productsData?.map(product => ({
-                ...product,
-                imageUrls: Array.isArray(product.imageUrls) ? product.imageUrls : product.imageUrls ? product.imageUrls.split(', ') : []
-            })) || []);
-            setEpochs(epochsData || []);
-            setRaritys(raritysData?.map(rarity => rarity.title) || []);
-            setLoading(false);
-        };
-
         fetchData();
     }, []);
 
-    const handlePostSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const { data } = await supabaseAdmin.from('posts').insert([{ ...newPost }]);
-        if (data) {
-            setPosts(prev => [...prev, ...data]);
-        }
-        setNewPost({ title: '', body: '', author: '', created: new Date().toISOString() });
-    };
+
+   
 
     const handleProductSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -231,9 +241,37 @@ export default function Admin() {
                         ) : (
                             <>
                                 <ButtonGroup mb={10} variant="outline" colorScheme="teal" size="lg" isAttached>
-                                    <Button onClick={() => setCurrentSection('posts')} isActive={currentSection === 'posts'}>Posts</Button>
+                                    <Button onClick={() => setCurrentSection('Stamps Submit')} isActive={currentSection === 'Stamps Submit'}>Stamps Submit</Button>
                                     <Button onClick={() => setCurrentSection('products')} isActive={currentSection === 'products'}>Products</Button>
                                 </ButtonGroup>
+
+                                {currentSection === 'Stamps Submit' && (
+                                <VStack spacing={4} align="stretch" mb={10}>
+                                    <Heading as="h3" size="lg" textAlign="center">All Stamps</Heading>
+                                    {stamps.length === 0 ? (
+                                        <Text textAlign="center">Nenhum selo encontrado.</Text>
+                                    ) : (
+                                        stamps.map((stamp) => (
+                                            <Box key={stamp.stampId} borderWidth="1px" borderRadius="lg" p={4} mb={4}>
+                                                <Text fontWeight="bold">Artist: {stamp.artist}</Text>
+                                                <Text>Email: {stamp.email}</Text>
+                                                <Text>Social Media Handle: {stamp.socialMediaHandle}</Text>
+                                                <Text>Description: {stamp.description}</Text>
+                                                <Text>Stamp ID: {stamp.stampId}</Text>
+                                                <Image 
+                                                    src={stamp.stampUrl.length > 0 ? stamp.stampUrl[0] : placeholderImage} 
+                                                    alt={stamp.stampId} 
+                                                    boxSize="150px" 
+                                                    objectFit="cover" 
+                                                    borderRadius="md" 
+                                                />
+                                            </Box>
+                                        ))
+                                    )}
+                                </VStack>
+                            )}
+
+
 
                                 {currentSection === 'products' && (
                                     <Box>
