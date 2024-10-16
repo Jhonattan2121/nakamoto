@@ -200,7 +200,7 @@ const SubmitFormModal: React.FC<SubmitFormModalProps> = ({ isOpen, onClose }) =>
                                                     setProductSuggestions([]); 
                                                 }}
                                             >
-                                                {product.STAMP_Asset} - {product.Creator_Name}
+                                                {product.STAMP_Asset} - {product.name}
                                             </Text>
                                         ))}
                                     </VStack>
