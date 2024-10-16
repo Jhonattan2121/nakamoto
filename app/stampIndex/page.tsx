@@ -14,6 +14,7 @@ import {
     DrawerHeader,
     DrawerOverlay,
     Flex,
+    Image,
     List,
     ListIcon,
     ListItem,
@@ -22,7 +23,7 @@ import {
     useDisclosure,
     VStack
 } from "@chakra-ui/react";
-import Image from 'next/image';
+
 import { useEffect, useState } from "react";
 import { MdCheckCircle, MdMenu } from "react-icons/md";
 import { supabase } from "../lib/supabase";
@@ -55,7 +56,7 @@ const StampIndex = () => {
     const [flippedIndex, setFlippedIndex] = useState<null | number>(null);
 
     const handleCardClick = (index: number) => {
-        setFlippedIndex(flippedIndex === index ? null : index); // Se o cartão já está girado, desvira; caso contrário, vira
+        setFlippedIndex(flippedIndex === index ? null : index);
     };
     const fetchData = async () => {
         const [{ data: stamps, error: stampsError }, { data: epochsData, error: epochsError }] = await Promise.all([
@@ -106,21 +107,34 @@ const StampIndex = () => {
     };
 
     useEffect(() => {
-        fetchData(); // Apenas uma chamada
+        fetchData();
     }, []);
+    useEffect(() => {
+        if (epochs.length > 0 && !selectedIndex) {
+            const firstEpoch = epochs[0]; 
+            const firstIndex = firstEpoch.indices[0];
+            setSelectedEpoch(firstEpoch.epoch_name); 
+            setSelectedIndex(firstIndex); 
+
+            const allStamps = Object.values(ilsData).flat();
+            const filteredStamps = allStamps.filter(stamp => stamp.epoch_index === firstIndex);
+            setStamps(filteredStamps);
+        }
+    }, [epochs, ilsData, selectedIndex]);
 
     const handleIndexClick = (index: string) => {
         setSelectedIndex(index);
         onClose();
 
-        // Filtrar os stamps com base no índice selecionado
-        const allStamps = Object.values(ilsData).flat(); // Combina todos os stamps
-        const filteredStamps = allStamps.filter(stamp => stamp.epoch_index === index); // Filtra pelo índice
-        setStamps(filteredStamps); // Atualiza o estado com os stamps filtrados
+        const allStamps = Object.values(ilsData).flat(); 
+        const filteredStamps = allStamps.filter(stamp => stamp.epoch_index === index); 
+        setStamps(filteredStamps); 
+        console.log(filteredStamps);
     };
 
     const handleEpochClick = (epoch: string) => {
         setSelectedEpoch(epoch);
+        console.log(epoch)
     };
 
     return (
@@ -150,7 +164,9 @@ const StampIndex = () => {
                                 width={85}
                                 height={85}
                                 objectFit="cover"
-                                layout="intrinsic"
+                                style={{
+                                    imageRendering: "pixelated",
+                                }}
                             />
                         </Box>
 
@@ -247,13 +263,15 @@ const StampIndex = () => {
                                         <CardBody bg={"transparent"}>
                                             <Center>
                                                 <Box mb={2} maxW="200px" maxH="200px" overflow="hidden">
-                                                    <Image
+                                                <Image
                                                         src={stamp.imageUrls[0] || "https://via.placeholder.com/150"}
                                                         alt={stamp.STAMP_Asset}
                                                         width={200}
                                                         height={200}
-                                                        layout="intrinsic"
                                                         objectFit="cover"
+                                                        style={{
+                                                            imageRendering: "pixelated",
+                                                        }}
                                                     />
                                                 </Box>
                                             </Center>
