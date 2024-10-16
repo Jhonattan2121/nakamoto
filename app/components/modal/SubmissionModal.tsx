@@ -195,7 +195,7 @@ const SubmitFormModal: React.FC<SubmitFormModalProps> = ({ isOpen, onClose }) =>
                                                     setFormData({
                                                         ...formData,
                                                         stampId: product.STAMP_Asset,
-                                                        stampUrl: product.Creator_Name, 
+                                                        artist: product.artist, 
                                                     });
                                                     setProductSuggestions([]); 
                                                 }}
