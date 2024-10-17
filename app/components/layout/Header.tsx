@@ -35,7 +35,7 @@ export default function Header() {
     return (
         <Box bg="background" px={4}  borderBottom="1px solid" borderColor="primary" >
             <Flex justify="space-between" align="center" wrap="wrap">
-                <HStack as={NextLink} href='/' spacing={2} cursor="pointer">
+                <HStack  spacing={2} cursor="pointer">
                     <Image src="/burnHead.svg" alt="Nakamoto" boxSize={{ base: '80px', md: '100px' }} />
                     <Text fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" color="primary">
                         Nakamoto
@@ -53,6 +53,17 @@ export default function Header() {
                     />
                 ) : (
                     <HStack spacing={8}>
+                         <Link 
+                            as={NextLink} 
+                            href='/' 
+                            fontSize="lg" 
+                            fontWeight="bold" 
+                            color="primary" 
+                            textDecoration="none" 
+                            _hover={{ textDecoration: 'none', color: 'primary' }} 
+                        >
+                            Home Page
+                        </Link>
                         <Link 
                             as={NextLink} 
                             href='/about' 
@@ -113,6 +124,18 @@ export default function Header() {
                     px={6}
                     shadow="md"
                 >
+                     <Link 
+                            as={NextLink} 
+                            href='/' 
+                            fontSize="lg" 
+                            fontWeight="bold" 
+                            color="primary" 
+                            textDecoration="none" 
+                            onClick={handleLinkClick} 
+                            _hover={{ textDecoration: 'none', color: 'primary' }} 
+                        >
+                            Home Page
+                        </Link>
                     <Link 
                         as={NextLink} 
                         href='/about' 

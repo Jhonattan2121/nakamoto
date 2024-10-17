@@ -60,15 +60,7 @@ export default function Home() {
             wrap="wrap"
           >
             <FlipCard />
-            <Image
-              src='/nsi1.png'
-              alt=''
-              ml={4}
-              maxWidth="90%"
-              objectFit="contain"
-              border="2px solid"
-              borderColor="limegreen"
-            />
+
           </Flex>
         </Center>
 
@@ -224,28 +216,27 @@ export default function Home() {
             <Grid
               templateAreas={{
                 base: `
-                  "image1"
-                  "image2"
-                  "image3"
-                `,
+      "image1 image1"
+      "image2 image3"
+    `,
                 md: `
-                  "image1 image1"
-                  "image2 image3"
-                `,
+      "image1 image1"
+      "image2 image3"
+    `,
               }}
               gridTemplateRows="auto"
               gridTemplateColumns={{
-                base: "1fr",
-                md: "repeat(2, 1fr)"
+                base: "repeat(2, 1fr)",
+                md: "repeat(2, 1fr)",
               }}
-              gap={4}
+              gap={0}
               position="relative"
             >
               <GridItem
                 area="image1"
                 position="relative"
                 left={{ base: "0px", md: "120px" }}
-                top={{ base: "0px", md: "50px" }}
+                top={{ base: "30px", md: "50px" }}
               >
                 <Image src="/nft.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
               </GridItem>
@@ -253,7 +244,8 @@ export default function Home() {
               <GridItem
                 area="image2"
                 position="relative"
-                left={{ base: "0px", md: "50px" }}
+                left={{ base: "-8px", md: "50px" }}
+                top={{ base: "-10px", md: "0px" }}
               >
                 <Image src="/nft2.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
               </GridItem>
@@ -261,11 +253,14 @@ export default function Home() {
               <GridItem
                 area="image3"
                 position="relative"
-                left={{ base: "0px", md: "-50px" }}
+                left={{ base: "-5px", md: "-50px" }}
+                top={{ base: "-10px", md: "0px" }}
               >
                 <Image src="/nft3.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
               </GridItem>
             </Grid>
+
+
           </GridItem>
           <GridItem>
             <Image src="/Pepe in Bali.png" alt="Beeple PepeFest" mb={4} borderRadius="md" />
