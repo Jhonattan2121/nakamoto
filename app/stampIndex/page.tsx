@@ -74,7 +74,6 @@ const StampIndex = () => {
             return;
         }
 
-        // Formata os dados de stamps
         const formattedStamps: Record<string, StampDetail[]> = {};
         stamps.forEach(stamp => {
             const key = stamp.epoch_name;
@@ -94,13 +93,11 @@ const StampIndex = () => {
             formattedStamps[key].push(stampDetail);
         });
 
-        // Formata os dados dos epochs
         const formattedEpochs = epochsData.map(epoch => ({
             epoch_name: epoch.epoch_name,
             indices: epoch.indices || []
         }));
 
-        // Atualiza o estado com os dados formatados
         setIlsData(formattedStamps);
         setEpochs(formattedEpochs);
         setLoading(false);
@@ -111,10 +108,10 @@ const StampIndex = () => {
     }, []);
     useEffect(() => {
         if (epochs.length > 0 && !selectedIndex) {
-            const firstEpoch = epochs[0]; 
+            const firstEpoch = epochs[0];
             const firstIndex = firstEpoch.indices[0];
-            setSelectedEpoch(firstEpoch.epoch_name); 
-            setSelectedIndex(firstIndex); 
+            setSelectedEpoch(firstEpoch.epoch_name);
+            setSelectedIndex(firstIndex);
 
             const allStamps = Object.values(ilsData).flat();
             const filteredStamps = allStamps.filter(stamp => stamp.epoch_index === firstIndex);
@@ -126,9 +123,9 @@ const StampIndex = () => {
         setSelectedIndex(index);
         onClose();
 
-        const allStamps = Object.values(ilsData).flat(); 
-        const filteredStamps = allStamps.filter(stamp => stamp.epoch_index === index); 
-        setStamps(filteredStamps); 
+        const allStamps = Object.values(ilsData).flat();
+        const filteredStamps = allStamps.filter(stamp => stamp.epoch_index === index);
+        setStamps(filteredStamps);
         console.log(filteredStamps);
     };
 
@@ -138,31 +135,36 @@ const StampIndex = () => {
     };
 
     return (
-        <Box p={5} mb={10} borderColor="brown" borderRadius="md" color="white" maxW="1200px" mx="auto">
+        <Box p={5} mb={10} borderColor="brown" borderRadius="md" color="white" maxW="1500px" mx="auto">
             <Text fontSize={["xl", "2xl"]} fontWeight="bold" mb={4} textAlign="center">
                 Nakamoto STAMP Index Timeline
             </Text>
 
-            <SimpleGrid columns={[2, 3, 4, 5]} spacing={2}>
+            <SimpleGrid columns={[2, 3, 4, 5]} spacing={1} >
                 {StampIndexData.map((artist, index) => (
                     <VStack
-                        key={index}
-                        textAlign="center"
-                        spacing={4}
-                        minHeight="300px"
-                        justify="space-between"
+                    key={index}
+                    textAlign="center"
+                    spacing={4}
+                    justifyContent="flex-start" 
+                    alignItems="center"
+                    position="relative"
                     >
+                        {/* Imagem */}
                         <Box
                             borderRadius="full"
                             overflow="hidden"
-                            boxSize="85px"
+                            boxSize="150px"
                             border="2px solid white"
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
                         >
                             <Image
                                 src={artist.imageUrl}
                                 alt={artist.title}
-                                width={85}
-                                height={85}
+                                width={150}
+                                height={150}
                                 objectFit="cover"
                                 style={{
                                     imageRendering: "pixelated",
@@ -170,20 +172,35 @@ const StampIndex = () => {
                             />
                         </Box>
 
-                        <Text fontWeight="bold" fontSize={["md", "lg"]}>
+                        {/* Pontos Verticais */}
+                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                            {/* Adiciona os pontos verticalmente */}
+                            {new Array(artist.dots || 5).fill(null).map((_, dotIndex) => (
+                                <Text key={dotIndex} display="block" color="gray.500">
+                                    •
+                                </Text>
+                            ))}
+                        </Box>
+
+                        {/* Título */}
+                        <Text fontWeight="bold" textAlign="center">
                             {artist.title}
                         </Text>
 
-                        <Text fontSize={["xs", "sm"]}>
-                            {artist.description}
+                        {/* Descrição */}
+                        <Text textAlign="center" >
+                        {artist.description}
                         </Text>
 
-                        <Text fontSize={["sm", "md"]} color="cyan.400" fontWeight="bold">
+
+                        {/* Nome */}
+                        <Text color="cyan.400" fontWeight="bold" textAlign="center">
                             {artist.name}
                         </Text>
                     </VStack>
                 ))}
             </SimpleGrid>
+
 
             <Button
                 display={["flex", "none"]}
@@ -192,8 +209,18 @@ const StampIndex = () => {
                 onClick={onOpen}
                 mb={4}
             />
-            <Flex mt={12} flexDirection={["column", "row"]}>
-                <Box width={["100%", "20%"]} display={["none", "block"]} borderRight="1px solid green" pr={5}>
+            <Flex
+                mt={12}
+                flexDirection={["column", "row"]}
+                alignItems={["center", "flex-start"]}
+                justifyContent={["center", "space-between"]}
+            >
+                <Box
+                    width={["100%", "20%"]}
+                    display={["none", "block"]}
+                    borderRight="1px solid green"
+                    pr={5}
+                >
                     {epochs.length > 0 ? (
                         epochs.map((epoch, epochIndex) => (
                             <Box key={epochIndex} mb={4}>
@@ -226,7 +253,7 @@ const StampIndex = () => {
                 </Box>
 
                 <Box width={["100%", "100%"]} pl={[0, 25]} textAlign="center">
-                    <SimpleGrid columns={[1, 2, 3]} spacing={10}>
+                    <SimpleGrid columns={[1, 2, 3]} spacing={10} justifyItems="center">
                         {stamps.map((stamp: StampDetail, stampIndex) => {
                             const isCardFlipped = flippedIndex === stampIndex;
 
@@ -237,8 +264,8 @@ const StampIndex = () => {
                                     height="550px"
                                     onClick={() => handleCardClick(stampIndex)}
                                     position="relative"
-                                    marginBottom={6}
-
+                                    mb={6}
+                                    mx="auto"
                                 >
                                     {/* Card Frente */}
                                     <Card
@@ -256,42 +283,39 @@ const StampIndex = () => {
                                         color={"white"}
                                         boxShadow="md"
                                     >
-
-                                        <Text fontWeight={"bold"} fontSize={"20px"} color="white">
-                                            Stamp {stamp.STAMP_Asset}
-                                        </Text>
                                         <CardBody bg={"transparent"}>
                                             <Center>
-                                                <Box mb={2} maxW="200px" maxH="200px" overflow="hidden">
-                                                <Image
-                                                        src={stamp.imageUrls[0] || "https://via.placeholder.com/150"}
+                                                <Box mb={2} maxW="auto" maxH="auto" overflow="hidden">
+                                                    <Image
+                                                        src={stamp.imageUrls[0]}
                                                         alt={stamp.STAMP_Asset}
-                                                        width={200}
-                                                        height={200}
+                                                        width={350}
+                                                        height={350}
                                                         objectFit="cover"
-                                                        style={{
-                                                            imageRendering: "pixelated",
-                                                        }}
+                                                        style={{ imageRendering: "pixelated" }}
                                                     />
                                                 </Box>
                                             </Center>
 
-                                            <Box p={8}>
-                                                <Text color={"white"} fontSize="large">
-                                                    <strong>Creator:</strong> {stamp.Creator_Name}
+                                            <Box textAlign="center" >
+
+
+                                                <Text color="white"  >
+                                                    <strong>index</strong> {stamp.epoch_index}
                                                 </Text>
-                                                <Text color={"white"} textAlign="center" fontSize="large">
-                                                    <strong>Rarity:</strong> {stamp.Title}
+                                                <Text color="white"
+                                                >
+                                                    <strong>Stamp</strong> {stamp.STAMP_Asset}
                                                 </Text>
-                                                <Text color={"white"} textAlign="center" fontSize="large">
-                                                    <strong>Score:</strong>{stamp.Rarity_Score}
+                                                <Text color="white" >
+                                                    <strong>Artist:</strong> {stamp.Creator_Name}
+                                                </Text>
+                                                <Text color="white" >
+                                                    <strong> Rarity Score:</strong> {stamp.Rarity_Score}
                                                 </Text>
                                             </Box>
-
-
-
-
                                         </CardBody>
+
                                     </Card>
 
                                     {/* Card Verso */}
@@ -317,13 +341,10 @@ const StampIndex = () => {
                                             bg="gray.800"
                                             p={2}
                                         >
-                                            <Text size="md" color="white">
-                                                Additional Info
-                                            </Text>
+                                            <Text size="md" color="white">Additional Info</Text>
                                         </CardHeader>
                                         <CardBody textAlign="center" width="100%" height="100%" borderRadius="20px">
                                             <Text color="gray.400">This is the back of the card.</Text>
-                                            {/* Adicione aqui mais informações que você deseja mostrar no verso do card */}
                                         </CardBody>
                                         <CardFooter>
                                             <Button
@@ -340,9 +361,9 @@ const StampIndex = () => {
                             );
                         })}
                     </SimpleGrid>
-
                 </Box>
             </Flex>
+
 
             <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
                 <DrawerOverlay />

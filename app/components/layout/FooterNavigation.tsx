@@ -1,7 +1,29 @@
+"use client"
 import { Box, Button, HStack, Link } from '@chakra-ui/react';
 import NextLink from 'next/link';
+import { useEffect, useState } from 'react';
+import SubmissionModal from '../modal/SubmissionModal';
 
 export default function FooterNavigation() {
+    const [modalDisplayed, setModalDisplayed] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+  
+
+   
     return (
         <Box
             as="nav"
@@ -22,16 +44,24 @@ export default function FooterNavigation() {
                         Home
                     </Link>
                 </Button>
-                <Button variant="ghost">
+                {/* <Button variant="ghost">
                     Explore
                 </Button>
                 <Button variant="ghost">
                     Notifications
-                </Button>
-                <Button variant="ghost">
-                    Messages
+                </Button> */}
+                <Button
+                    onClick={() => setModalDisplayed(true)}
+                    variant="solid"
+                    colorScheme="teal"
+                    size="md"
+                    ml={{ base: 0, md: 4 }}
+                    _hover={{ bg: 'teal.600' }}
+                >
+                    Submit
                 </Button>
             </HStack>
+            <SubmissionModal isOpen={modalDisplayed} onClose={() => setModalDisplayed(false)} />
         </Box>
     );
 }
