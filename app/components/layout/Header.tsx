@@ -28,6 +28,10 @@ export default function Header() {
         setIsMenuOpen(!isMenuOpen);
     };
 
+    const handleLinkClick = () => {
+        setIsMenuOpen(false); 
+    };
+
     return (
         <Box bg="background" px={4} py={4} borderBottom="1px solid" borderColor="primary">
             <Flex justify="space-between" align="center" wrap="wrap">
@@ -82,15 +86,14 @@ export default function Header() {
                     py={4}
                     px={6}
                     shadow="md"
-                    display={isMobile ? 'flex' : 'none'}
                 >
-                    <Link as={NextLink} href='/about' fontSize="lg" fontWeight="bold" color="primary" onClick={handleMenuToggle}>
+                    <Link as={NextLink} href='/about' fontSize="lg" fontWeight="bold" color="primary" onClick={handleLinkClick}>
                         About Us
                     </Link>
-                    <Link as={NextLink} href='/stampIndex' fontSize="lg" fontWeight="bold" color="primary" onClick={handleMenuToggle}>
+                    <Link as={NextLink} href='/stampIndex' fontSize="lg" fontWeight="bold" color="primary" onClick={handleLinkClick}>
                         Stamps Index
                     </Link>
-                    <Link as={NextLink} href='/rules' fontSize="lg" fontWeight="bold" color="primary" onClick={handleMenuToggle}>
+                    <Link as={NextLink} href='/rules' fontSize="lg" fontWeight="bold" color="primary" onClick={handleLinkClick}>
                         Rules
                     </Link>
                 </VStack>

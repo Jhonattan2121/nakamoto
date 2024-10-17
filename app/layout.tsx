@@ -25,7 +25,7 @@ export default function RootLayout({
       <body>
         <Cursor />
         <Providers>
-          <Box bg="background" color="text" minH="100vh">
+          <Box bg="background" color="text" >
             <Header />
             <Flex direction={{ base: 'column', md: 'row' }}>
               <Box flex="1">

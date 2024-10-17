@@ -1,126 +1,191 @@
-'use client'
-import { Box, Button, Container, Flex, Grid, GridItem, Image, keyframes, Text, useDisclosure } from '@chakra-ui/react';
+'use client';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Center, Container, Flex, Grid, GridItem, Image, Text, useDisclosure } from '@chakra-ui/react';
 import { useState } from 'react';
 import FlipCard from './components/FlipCard';
 import SubmitFormModal from './components/modal/SubmissionModal';
 import { dummyProducts } from './components/store/Products';
-const spin = keyframes`
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-`;
-
-
-
-const flipCardInnerStyles = {
-  position: "relative",
-  width: "100%",
-  height: "100%",
-  textAlign: "center",
-  transition: "transform 0.6s",
-  transformStyle: "preserve-3d",
-};
-
-const flipCardFlippedStyles = {
-  transform: "rotateY(180deg)",
-};
-
-const flipCardSideStyles = {
-  position: "absolute",
-  width: "100%",
-  height: "100%",
-  backfaceVisibility: "hidden",
-};
-
-const flipCardBackStyles = {
-  transform: "rotateY(180deg)",
-};
 
 export default function Home() {
   const [isFlipped, setIsFlipped] = useState<boolean[]>(Array(dummyProducts.length).fill(false));
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-
-  const handleClick = (index: number) => {
+  const handleCardClick = (index: number) => {
     const updatedFlips = [...isFlipped];
     updatedFlips[index] = !updatedFlips[index];
     setIsFlipped(updatedFlips);
   };
 
   return (
-    <Box bg="#0a0e0b" color="white" minH="100vh">
-      <Container maxW="container.xl" py={12}>
+    <Box bg="#0a0e0b" color="white" >
+      <Container maxW="container.xl" >
         <Flex
           align="center"
-          justify="center"
+          justify="space-between"
           flexDirection={{ base: 'column', md: 'row' }}
           textAlign={{ base: 'center', md: 'left' }}
-          mb={8}
+
         >
-          <Text fontSize={{ base: 'lg', md: '2xl' }} fontWeight="bold" mb={{ base: 4, md: 0 }} flex={1}>
+          <Text
+            fontSize={{ base: 'lg', md: '2xl' }}
+            fontWeight="bold"
+            mb={{ base: 4, md: 0 }}
+            flex={1}
+
+          >
             Home to only the most immutable and unprunable artworks on the Bitcoin blockchain
-            <br />
-            <br />
-            -NSIDirectory
           </Text>
           <Image
             src="/burnHead.svg"
             alt="Nakamoto"
             boxSize={{ base: "160px", md: "240px" }}
-            animation={`${spin} 4s linear infinite`}
+            transition="transform 0.3s ease"
+            _hover={{ transform: "scale(1.05)" }}
+            mb={{ base: 4, md: 0 }}
           />
-        </Flex>
 
-        <Grid textAlign="center" gap={6} py={12}>
-          <FlipCard />
-        </Grid>
+        </Flex>
+        <Text
+          fontSize={{ base: 'xl', md: '2xl' }}
+          fontWeight="bold"
+          textAlign="center"
+          mb={8}
+        >
+          -NSIDirectory
+        </Text>
+        <Center mb={8}>
+          <Flex
+            direction="row"
+            align="center"
+            justify="center"
+            wrap="wrap"
+          >
+            <FlipCard />
+            <Image
+              src='/nsi1.png'
+              alt=''
+              ml={4}
+              maxWidth="90%"
+              objectFit="contain"
+              border="2px solid"
+              borderColor="limegreen"
+            />
+          </Flex>
+        </Center>
+
 
         <Text fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" textAlign="center" mb={8}>
           STAMP Artworks
         </Text>
 
-        <Grid templateColumns={{ base: '1fr', md: 'repeat(4, 1fr)' }} gap={6} mb={8}>
+        <Grid
+          templateColumns={{
+            base: '1fr',
+            sm: '1fr',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(4, 1fr)',
+          }}
+          gap={6}
+          mb={8}
+          justifyContent="center"
+          alignItems="stretch"
+        >
           {dummyProducts.map((product, index) => {
-            const imageUrl = product.imageUrls[0];
-            const width = product.width ?? 0;
-            const height = product.height ?? 0;
-            const isLandscape = width > height;
+            const imageUrl = product.imageUrls ? product.imageUrls[0] : "/nsi1.png";
+            const isWideImage = (product.width ?? 0) > (product.height ?? 0);
 
             return (
               <GridItem
-                key={product.id}
+                key={index}
                 textAlign="center"
-                onClick={() => handleClick(index)}
-                colSpan={{ base: 1, md: isLandscape ? 2 : 1 }}
+                onClick={() => handleCardClick(index)}
+                colSpan={{ base: isWideImage ? 1 : 1, md: isWideImage ? 2 : 1 }}
               >
-                <Box sx={{ ...flipCardInnerStyles, ...(isFlipped[index] && flipCardFlippedStyles) }}>
-                  {!isFlipped[index] ? (
-                    <Image
-                      src={imageUrl}
-                      alt={product.name}
-                      border="2px solid #fff"
-                      borderRadius="md"
-                      sx={{
-                        width: '100%',
-                        height: 'auto',
-                        objectFit: 'cover'
-                      }}
-                    />
-                  ) : (
-                    <Box sx={{ ...flipCardSideStyles, ...flipCardBackStyles }}>
-                      <Image
-                        src="/nsi1.png"
-                        alt="Primeira Imagem"
-                        sx={{
-                          width: '100%',
-                          height: 'auto',
-                          objectFit: 'cover'
-                        }}
-                      />
-                    </Box>
-                  )}
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  height={{ base: "400px", md: "410px" }}
+                  position="relative"
+                  style={{ perspective: "1000px" }}
+                  mb={6}
+                >
+                  {/* Card Frente */}
+                  <Card
+                    sx={{
+                      transition: "transform 1.1s",
+                      transform: isFlipped[index] ? "rotateY(180deg)" : "rotateY(0deg)",
+                      width: "100%",
+                      height: "100%",
+                      backfaceVisibility: "hidden",
+                      overflow: "hidden",
+                      borderRadius: "lg",
+                    }}
+                    bg="transparent"
+                    size="sm"
+                    color="white"
+                  >
+                    <CardBody bg={"transparent"}>
+                      <Center>
+                        <Box mb={2} overflow="hidden">
+                          <Image
+                            src={imageUrl}
+                            alt={`Image ${index}`}
+                            objectFit="cover"
+                            width="100%"
+                            height="auto"
+                            maxHeight={isWideImage ? "400px" : "300px"}
+                            borderRadius="lg"
+                          />
+                        </Box>
+                      </Center>
+                    </CardBody>
+                    <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="bold">STAMP #{index + 1}</Text>
+                    <Text fontSize={{ base: 'sm', md: 'md' }}>{product.name}</Text>
+                  </Card>
 
-                  <Text fontSize="sm" color="gray.400">STAMP #{product.id}</Text>
-                  <Text fontSize="sm" color="gray.400">artist: {product.name}</Text>
+                  {/* Card Verso */}
+                  <Card
+                    sx={{
+                      transition: "transform 1.1s",
+                      transform: isFlipped[index] ? "rotateY(0deg)" : "rotateY(180deg)",
+                      width: "100%",
+                      height: "100%",
+                      backfaceVisibility: "hidden",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      overflow: "hidden",
+                      borderRadius: "lg",
+                    }}
+                    bg="transparent"
+                    size="sm"
+                    color="white"
+                  >
+                    <CardHeader
+                      borderBottom={"1px solid white"}
+                      borderTopRadius="10px"
+                      textAlign="center"
+                      p={2}
+                    >
+                      <Text size="md" color="white">
+                        Additional Info
+                      </Text>
+                    </CardHeader>
+                    <CardBody textAlign="center" width="100%" height="100%" borderRadius="20px">
+                      <Text color="gray.400">This is the back of the card.</Text>
+                    </CardBody>
+                    <CardFooter>
+                      <Button
+                        colorScheme="yellow"
+                        size="sm"
+                        variant={"outline"}
+                        onClick={() => handleCardClick(index)}
+                      >
+                        Back
+                      </Button>
+                    </CardFooter>
+                  </Card>
                 </Box>
               </GridItem>
             );
@@ -159,19 +224,19 @@ export default function Home() {
             <Grid
               templateAreas={{
                 base: `
-      "image1"
-      "image2"
-      "image3"
-    `,
+                  "image1"
+                  "image2"
+                  "image3"
+                `,
                 md: `
-      "image1 image1"
-      "image2 image3"
-    `,
+                  "image1 image1"
+                  "image2 image3"
+                `,
               }}
               gridTemplateRows="auto"
               gridTemplateColumns={{
                 base: "1fr",
-                md: "repeat(2, 1fr)" 
+                md: "repeat(2, 1fr)"
               }}
               gap={4}
               position="relative"
@@ -201,11 +266,7 @@ export default function Home() {
                 <Image src="/nft3.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
               </GridItem>
             </Grid>
-
-
-
           </GridItem>
-
           <GridItem>
             <Image src="/Pepe in Bali.png" alt="Beeple PepeFest" mb={4} borderRadius="md" />
             <Text fontSize="lg">
@@ -215,12 +276,6 @@ export default function Home() {
             </Text>
           </GridItem>
         </Grid>
-      </Container>
-
-      <Container maxW="container.xl" py={8}>
-        <Flex justify="center" align="center">
-          <Image src="/Stamp Logo.png" alt="Stamp Icon" boxSize="50px" />
-        </Flex>
       </Container>
 
     </Box>

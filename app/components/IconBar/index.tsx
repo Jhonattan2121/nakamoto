@@ -3,31 +3,36 @@ import { FaMedium, FaTelegram, FaTwitter } from "react-icons/fa";
 
 const IconBar = () => {
   return (
-    <Box bg="#0F120F" w="100%" p={4}> 
-      <Flex justify="center" gap={6} align="center" height="100px"> 
+    <Box
+      bg="#0a0e0b"
+      w="100%"
+
+      mt="auto"
+    >
+      <Flex justify="center" gap={6} align="center" height="100px">
         <IconButton
           as="a"
-          href="https://x.com" 
+          href="https://x.com"
           aria-label="X"
-          icon={<FaTwitter size="35px" />} 
+          icon={<FaTwitter size="35px" />}
           bg="transparent"
           color="white"
           _hover={{ bg: "whiteAlpha.200" }}
         />
         <IconButton
           as="a"
-          href="https://telegram.com" 
+          href="https://telegram.com"
           aria-label="Telegram"
-          icon={<FaTelegram size="35px" />} 
+          icon={<FaTelegram size="35px" />}
           bg="transparent"
           color="white"
           _hover={{ bg: "whiteAlpha.200" }}
         />
         <IconButton
           as="a"
-          href="https://medium.com" 
+          href="https://medium.com"
           aria-label="Medium"
-          icon={<FaMedium size="35px" />} 
+          icon={<FaMedium size="35px" />}
           bg="transparent"
           color="white"
           _hover={{ bg: "whiteAlpha.200" }}

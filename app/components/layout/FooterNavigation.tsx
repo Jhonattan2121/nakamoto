@@ -14,12 +14,13 @@ export default function FooterNavigation() {
             borderTop="1px solid"
             borderColor="border"
             display={{ base: 'block', md: 'none' }}
+            zIndex={1}
         >
             <HStack justify="space-around">
                 <Button variant="ghost">
-                   <Link as={NextLink} href='/' fontSize="lg" fontWeight="bold" color="primary">
-                   Home
-                   </Link>
+                    <Link as={NextLink} href='/' fontSize="lg" fontWeight="bold" color="primary">
+                        Home
+                    </Link>
                 </Button>
                 <Button variant="ghost">
                     Explore
