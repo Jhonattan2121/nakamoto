@@ -132,7 +132,7 @@ export default function Home() {
                         </Box>
                       </Center>
                     </CardBody>
-                    <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="bold">STAMP #{index + 1}</Text>
+                    <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="bold">STAMP #{product.stamp}</Text>
                     <Text fontSize={{ base: 'sm', md: 'md' }}>{product.name}</Text>
                   </Card>
 

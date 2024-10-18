@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Link as ChakraLink, Heading, Image, List, ListItem, SimpleGrid, Text, useTheme, VStack } from '@chakra-ui/react';
+import { Box, Link as ChakraLink, Heading, List, ListItem, Text, useTheme } from '@chakra-ui/react';
 import React from 'react';
 
 const Rules: React.FC = () => {
@@ -122,57 +122,7 @@ const Rules: React.FC = () => {
                     </ListItem>
                 </List>
             </Box>
-             <Box maxW="700px" mx="auto" p={5}>
-                <SimpleGrid columns={{ base: 1, md: 4 }} spacing={6}>
-                    <VStack spacing={2} textAlign="center">
-                        <Image
-                            src="/Common.png"
-                            alt="Description for Image 1"
-                            borderRadius="md"
-                           border="2px solid"
-                           borderColor="white"
-                            objectFit="cover"
-                        />
-                        <Text color="white">Common</Text>
-                    </VStack>
-                    
-                    <VStack spacing={2} textAlign="center">
-                        <Image
-                            src="/Rare.png"
-                            alt="Description for Image 2"
-                            borderRadius="md"
-                            border="2px solid"
-                           borderColor="blue"
-                            objectFit="cover"
-                        />
-                        <Text color="white">Rare</Text>
-                    </VStack>
-                    
-                    <VStack spacing={2} textAlign="center">
-                        <Image
-                            src="/Epic.png"
-                            alt="Description for Image 3"
-                            borderRadius="md"
-                             border="2px solid"
-                           borderColor="red"
-                            objectFit="cover"
-                        />
-                        <Text color="white">Epic</Text>
-                    </VStack>
-                    
-                    <VStack spacing={2} textAlign="center">
-                        <Image
-                            src="/Legendary(Nakamoto).png"
-                            alt="Description for Image 4"
-                            borderRadius="md"
-                             border="2px solid"
-                           borderColor="yellow"
-                            objectFit="cover"
-                        />
-                        <Text color="white">Legendary(Nakamoto)</Text>
-                    </VStack>
-                </SimpleGrid>
-            </Box>
+            
         </>
     );
 };

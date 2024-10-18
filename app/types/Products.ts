@@ -9,4 +9,5 @@ export interface Product {
     rating: number;
     width?: number;   
     height?: number;
+    stamp?: number;
 }

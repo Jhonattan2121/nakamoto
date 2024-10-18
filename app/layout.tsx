@@ -25,16 +25,16 @@ export default function RootLayout({
       <body>
         <Cursor />
         <Providers>
-          <Box bg="background" color="text" >
+          <Box bg="background" color="text" minH="100vh" display="flex" flexDirection="column">
             <Header />
-            <Flex direction={{ base: 'column', md: 'row' }}>
+            <Flex direction={{ base: 'column', md: 'row' }} flex="1">
               <Box flex="1">
                 {children}
               </Box>
             </Flex>
+            <IconBar /> 
             <FooterNavigation />
           </Box>
-          <IconBar />
         </Providers>
       </body>
     </html>

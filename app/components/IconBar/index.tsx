@@ -6,8 +6,8 @@ const IconBar = () => {
     <Box
       bg="#0a0e0b"
       w="100%"
-
-      mt="auto"
+      mt={{ base: "0", md: "0" }}
+      mb={{ base: "40px", md: "0" }}
     >
       <Flex justify="center" gap={6} align="center" height="100px">
         <IconButton
