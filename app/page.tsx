@@ -233,9 +233,8 @@ export default function Home() {
               position="relative"
             >
               <GridItem
-                area="image1"
                 position="relative"
-                left={{ base: "0px", md: "120px" }}
+                left={{ base: "75px", md: "120px" }}
                 top={{ base: "30px", md: "50px" }}
               >
                 <Image src="/nft.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
