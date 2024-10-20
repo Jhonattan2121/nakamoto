@@ -277,13 +277,13 @@ export default function Home() {
             <Image src="/nft.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
           </GridItem>
 
-          <GridItem area="image2" position="relative"
+          <GridItem  position="relative"
             left={{ base: "-8px", md: "0px" }}
             top={{ base: "-4px", md: "0px" }}>
             <Image src="/nft2.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
           </GridItem>
 
-          <GridItem area="image3" position="relative"
+          <GridItem position="relative"
             left={{ base: "-5px", md: "0px" }}
             top={{ base: "-10px", md: "0px" }}>
             <Image src="/nft3.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
