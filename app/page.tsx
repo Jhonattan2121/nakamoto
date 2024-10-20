@@ -1,5 +1,6 @@
-import { Box } from "@chakra-ui/react";
 import Admin from "./components/admin";
+import ClientLayout from "./layout.client";
+import ServerLayout from "./layout.server";
 
 
 
@@ -8,8 +9,10 @@ export default function Home() {
 
 
   return (
-   <Box>
+   <ServerLayout>
+    <ClientLayout>
     <Admin />
-   </Box>
+    </ClientLayout>
+   </ServerLayout>
   );
 }

@@ -12,10 +12,10 @@ import {
     Select,
     Spinner,
     Text,
+    useToast,
     VStack
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { FaSignOutAlt } from 'react-icons/fa';
 
 
 interface Product {
@@ -45,6 +45,7 @@ interface Stamp {
 
 
 export default function Admin() {
+    const toast = useToast();
     const [products, setProducts] = useState<Product[]>([]);
     const [epochs, setEpochs] = useState<Epoch[]>([]);
     const [loading, setLoading] = useState(true);
@@ -59,7 +60,7 @@ export default function Admin() {
         epoch_index: '',
 
     });
-   
+
     const [raritys, setRaritys] = useState<string[]>([]);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [currentSection, setCurrentSection] = useState<'Stamps Submit' | 'products'>('Stamps Submit');
@@ -71,31 +72,31 @@ export default function Admin() {
     const placeholderImage = "https://via.placeholder.com/150";
 
     const fetchData = async () => {
-        const [ { data: productsData }, { data: epochsData }, { data: raritysData }, { data: stampsData }] = await Promise.all([
+        const [{ data: productsData }, { data: epochsData }, { data: raritysData }, { data: stampsData }] = await Promise.all([
             supabaseAdmin.from('products').select('*'),
             supabaseAdmin.from('epochs').select('*'),
             supabaseAdmin.from('raritys').select('title'),
-            supabaseAdmin.from('stamps').select('*'), 
+            supabaseAdmin.from('stamps').select('*'),
         ]);
-    
+
         console.log('Stamps Data:', stampsData);
-    
+
         setProducts(productsData?.map(product => ({
             ...product,
             imageUrls: Array.isArray(product.imageUrls) ? product.imageUrls : product.imageUrls ? product.imageUrls.split(', ') : []
         })) || []);
         setEpochs(epochsData || []);
         setRaritys(raritysData?.map(rarity => rarity.title) || []);
-    
+
         const formattedStamps = stampsData?.map(stamp => ({
             ...stamp,
-            stampUrl: Array.isArray(stamp.stampUrl) 
-            ? stamp.stampUrl 
-            : typeof stamp.stampUrl === 'string' 
-                ? (stamp.stampUrl.trim().startsWith('[') ? JSON.parse(stamp.stampUrl) : [stamp.stampUrl]) 
-                : []
-                })) || [];
-    
+            stampUrl: Array.isArray(stamp.stampUrl)
+                ? stamp.stampUrl
+                : typeof stamp.stampUrl === 'string'
+                    ? (stamp.stampUrl.trim().startsWith('[') ? JSON.parse(stamp.stampUrl) : [stamp.stampUrl])
+                    : []
+        })) || [];
+
         console.log('Formatted Stamps:', formattedStamps);
         setStamps(formattedStamps);
         setLoading(false);
@@ -105,10 +106,20 @@ export default function Admin() {
     }, []);
 
 
-   
+
 
     const handleProductSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!newProduct.STAMP_Asset || !newProduct.Creator_Name || !newProduct.Title || newProduct.Rarity_Score <= 0 || newProduct.Top <= 0) {
+            toast({
+                title: "Validation error",
+                description: "Please fill in all required fields correctly.",
+                status: "warning",
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
 
         const imageUrls = imageFile ? await uploadImage(imageFile) : [];
 
@@ -127,11 +138,25 @@ export default function Admin() {
 
         if (error) {
             console.error('Supabase insert error:', error.message);
+            toast({
+                title: "Error creating product",
+                description: error.message,
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
         } else {
             setProducts(prev => [...prev, ...(data || [])]);
+            toast({
+                title: "Product created",
+                description: "Product added successfully!",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
         }
 
-        setNewProduct({ STAMP_Asset: '', Creator_Name: "", Top: 0, Title: "", Rarity_Score: 0, imageUrls: [], epoch_name: '', epoch_index: '' });
+        setNewProduct({ STAMP_Asset: '', Creator_Name: '', Top: 0, Title: '', Rarity_Score: 0, imageUrls: [], epoch_name: '', epoch_index: '' });
         setImageFile(null);
     };
 
@@ -167,23 +192,20 @@ export default function Admin() {
         });
 
         if (error) {
-            alert('Nome de usuário ou senha incorretos');
-            console.error('Erro de autenticação:', error.message);
+            toast({
+                title: "Authentication error",
+                description: "Incorrect username or password.",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+            console.error('Authentication error:', error.message);
         } else {
             setIsAuthenticated(true);
         }
     };
 
-    const handleLogout = async () => {
-        const { error } = await supabaseAdmin.auth.signOut();
-        if (error) {
-            console.error('Erro ao sair:', error.message);
-        } else {
-            setIsAuthenticated(false);
-            setUsername('');
-            setPassword('');
-        }
-    };
+
 
 
     if (loading) {
@@ -220,59 +242,58 @@ export default function Admin() {
                                 color="white"
                             />
                         </FormControl>
-                        <Button type="submit" colorScheme="teal" width="100%">Login</Button>
+                        <Button type="submit" colorScheme="teal" width="100%" variant="outline">Login</Button>
                     </form>
                 ) : (
                     <>
-                        <Button
-                            onClick={handleLogout}
-                            colorScheme="red"
-                            mb={4}
-                            size="lg"
-                            leftIcon={<FaSignOutAlt />}
-                            borderRadius="md"
-                            boxShadow="md"
-                            _hover={{ bg: "red.600", transform: "scale(1.05)", transition: "0.2s" }}
-                        >
-                            Logout
-                        </Button>
+
                         {loading ? (
                             <Spinner color="teal.300" size="xl" />
                         ) : (
                             <>
-                                <ButtonGroup mb={10} variant="outline" colorScheme="teal" size="lg" isAttached>
-                                    <Button onClick={() => setCurrentSection('Stamps Submit')} isActive={currentSection === 'Stamps Submit'}>Stamps Submit</Button>
-                                    <Button onClick={() => setCurrentSection('products')} isActive={currentSection === 'products'}>Products</Button>
+                                <ButtonGroup mb={10} variant="outline" colorScheme="teal" size="lg">
+                                    <Button
+                                        onClick={() => setCurrentSection('Stamps Submit')}
+                                        isActive={currentSection === 'Stamps Submit'}
+                                        variant={currentSection === 'Stamps Submit' ? 'solid' : 'outline'}
+                                    >
+                                        Stamps Submit
+                                    </Button>
+                                    <Button
+                                        onClick={() => setCurrentSection('products')}
+                                        isActive={currentSection === 'products'}
+                                        variant={currentSection === 'products' ? 'solid' : 'outline'}
+                                    >
+                                        Products
+                                    </Button>
                                 </ButtonGroup>
 
+
                                 {currentSection === 'Stamps Submit' && (
-                                <VStack spacing={4} align="stretch" mb={10}>
-                                    <Heading as="h3" size="lg" textAlign="center">All Stamps</Heading>
-                                    {stamps.length === 0 ? (
-                                        <Text textAlign="center">Nenhum selo encontrado.</Text>
-                                    ) : (
-                                        stamps.map((stamp) => (
-                                            <Box key={stamp.stampId} borderWidth="1px" borderRadius="lg" p={4} mb={4}>
-                                                <Text fontWeight="bold">Artist: {stamp.artist}</Text>
-                                                <Text>Email: {stamp.email}</Text>
-                                                <Text>Social Media Handle: {stamp.socialMediaHandle}</Text>
-                                                <Text>Description: {stamp.description}</Text>
-                                                <Text>Stamp ID: {stamp.stampId}</Text>
-                                                <Image 
-                                                    src={stamp.stampUrl.length > 0 ? stamp.stampUrl[0] : placeholderImage} 
-                                                    alt={stamp.stampId} 
-                                                    boxSize="150px" 
-                                                    objectFit="cover" 
-                                                    borderRadius="md" 
-                                                />
-                                            </Box>
-                                        ))
-                                    )}
-                                </VStack>
-                            )}
-
-
-
+                                    <VStack spacing={4} align="stretch" mb={10}>
+                                        <Heading as="h3" size="lg" textAlign="center">All Stamps</Heading>
+                                        {stamps.length === 0 ? (
+                                            <Text textAlign="center">Nenhum selo encontrado.</Text>
+                                        ) : (
+                                            stamps.map((stamp) => (
+                                                <Box key={stamp.stampId} borderWidth="1px" borderRadius="lg" p={4} mb={4}>
+                                                    <Text fontWeight="bold">Artist: {stamp.artist}</Text>
+                                                    <Text>Email: {stamp.email}</Text>
+                                                    <Text>Social Media Handle: {stamp.socialMediaHandle}</Text>
+                                                    <Text>Description: {stamp.description}</Text>
+                                                    <Text>Stamp ID: {stamp.stampId}</Text>
+                                                    <Image
+                                                        src={stamp.stampUrl.length > 0 ? stamp.stampUrl[0] : placeholderImage}
+                                                        alt={stamp.stampId}
+                                                        boxSize="150px"
+                                                        objectFit="cover"
+                                                        borderRadius="md"
+                                                    />
+                                                </Box>
+                                            ))
+                                        )}
+                                    </VStack>
+                                )}
                                 {currentSection === 'products' && (
                                     <Box>
                                         <Heading size="lg" mb={4} textAlign="center" color="teal.400">Create Product</Heading>
