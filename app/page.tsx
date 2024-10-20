@@ -271,7 +271,7 @@ export default function Home() {
           gap={4}
           mt={8}
         >
-          <GridItem area="image1" position="relative" zIndex="1"
+          <GridItem position="relative" zIndex="1"
             left={{ base: "75px", md: "0px" }}
             top={{ base: "50px", md: "0px" }}>
             <Image src="/nft.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
