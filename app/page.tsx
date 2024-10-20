@@ -201,7 +201,12 @@ export default function Home() {
       </Container>
 
       <Container maxW="container.xl" py={12}>
-        <Text fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" mb={8} color="lightgreen">
+        <Text
+          fontSize={{ base: 'xl', md: '2xl' }}
+          fontWeight="bold"
+          mb={8}
+          color="lightgreen"
+        >
           Whats new in STAMPS...
         </Text>
 
@@ -213,54 +218,35 @@ export default function Home() {
               The Pepe in Bali Exhibition at the Superlative Gallery in Bali showcases Pepe art from August 11th to August 24th, 2024.
               The event features diverse Pepe interpretations in Bali, focusing on digital art and technology, with involvement from curators, collaborators, and the Pepe community.
             </Text>
+
+            {/* Grid de imagens apenas no desktop */}
             <Grid
+              display={{ base: "none", md: "grid" }}
               templateAreas={{
-                base: `
-      "image1 image1"
-      "image2 image3"
-    `,
                 md: `
-      "image1 image1"
-      "image2 image3"
-    `,
+          "image1 image1"
+          "image2 image3"
+          `,
               }}
               gridTemplateRows="auto"
-              gridTemplateColumns={{
-                base: "repeat(2, 1fr)",
-                md: "repeat(2, 1fr)",
-              }}
+              gridTemplateColumns="repeat(2, 1fr)"
               gap={0}
               position="relative"
             >
-              <GridItem
-                position="relative"
-                left={{ base: "75px", md: "120px" }}
-                top={{ base: "30px", md: "50px" }}
-              >
+              <GridItem position="relative" left="120px" top="50px">
                 <Image src="/nft.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
               </GridItem>
 
-              <GridItem
-                area="image2"
-                position="relative"
-                left={{ base: "-8px", md: "50px" }}
-                top={{ base: "-10px", md: "0px" }}
-              >
+              <GridItem area="image2" position="relative" left="50px" top="0px">
                 <Image src="/nft2.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
               </GridItem>
 
-              <GridItem
-                area="image3"
-                position="relative"
-                left={{ base: "-5px", md: "-50px" }}
-                top={{ base: "-10px", md: "0px" }}
-              >
+              <GridItem area="image3" position="relative" left="-50px" top="0px">
                 <Image src="/nft3.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
               </GridItem>
             </Grid>
-
-
           </GridItem>
+
           <GridItem>
             <Image src="/Pepe in Bali.png" alt="Beeple PepeFest" mb={4} borderRadius="md" />
             <Text fontSize="lg">
@@ -270,7 +256,42 @@ export default function Home() {
             </Text>
           </GridItem>
         </Grid>
+
+        {/* Grid de imagens no mobile */}
+        <Grid
+          display={{ base: "grid", md: "none" }}
+          gridTemplateColumns="1fr"
+          templateAreas={{
+            base: `
+"image1 image1"
+"image2 image3"
+`,
+
+          }}
+          gap={4}
+          mt={8}
+        >
+          <GridItem area="image1" position="relative" zIndex="1"
+            left={{ base: "75px", md: "0px" }}
+            top={{ base: "50px", md: "0px" }}>
+            <Image src="/nft.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
+          </GridItem>
+
+          <GridItem area="image2" position="relative"
+            left={{ base: "-8px", md: "0px" }}
+            top={{ base: "-4px", md: "0px" }}>
+            <Image src="/nft2.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
+          </GridItem>
+
+          <GridItem area="image3" position="relative"
+            left={{ base: "-5px", md: "0px" }}
+            top={{ base: "-10px", md: "0px" }}>
+            <Image src="/nft3.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
+          </GridItem>
+        </Grid>
       </Container>
+
+
 
     </Box>
   );

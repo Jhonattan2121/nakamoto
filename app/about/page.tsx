@@ -41,7 +41,7 @@ const About = () => {
             handle: '@mikeinspace',
             platform: 'X',
             description: 'Founder of STAMPS Protocol. Like to stamp jpegs on the blockchain.',
-            imageUrl: '/5.jpg',
+            imageUrl: '/Mike.png',
         },
         {
             name: 'Viva',
@@ -62,7 +62,7 @@ const About = () => {
             handle: '@BobbyZoo_BA',
             platform: 'X',
             description: 'OG Digital Artist, STAMPS Collectors, Emergency contact for enemies',
-            imageUrl: '/8.jpg',
+            imageUrl: '/Bobbyzoo.png',
         },
         {
             name: 'Bobby',
