@@ -16,7 +16,8 @@ export default function Home() {
   };
 
   return (
-    <Box bg="#0a0e0b" color="white" >
+    <Box bg="#0a0e0b" color="white"
+    >
       <Container maxW="container.xl" >
         <Flex
           align="center"
@@ -261,32 +262,16 @@ export default function Home() {
         <Grid
           display={{ base: "grid", md: "none" }}
           gridTemplateColumns="1fr"
-          templateAreas={{
-            base: `
-"image1 image1"
-"image2 image3"
-`,
 
-          }}
+
           gap={4}
           mt={8}
         >
-          <GridItem position="relative" zIndex="1"
-            left={{ base: "75px", md: "0px" }}
-            top={{ base: "50px", md: "0px" }}>
-            <Image src="/nft.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
-          </GridItem>
 
-          <GridItem area="image2" position="relative"
-            left={{ base: "-8px", md: "0px" }}
-            top={{ base: "-4px", md: "0px" }}>
-            <Image src="/nft2.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
-          </GridItem>
 
-          <GridItem area="image3" position="relative"
-            left={{ base: "-5px", md: "0px" }}
-            top={{ base: "-10px", md: "0px" }}>
-            <Image src="/nft3.jpeg" alt="Pepe in Bali Exhibition" borderRadius="md" />
+          <GridItem position="relative"
+          >
+            <Image src="/11.png" alt="Pepe in Bali Exhibition" borderRadius="md" />
           </GridItem>
         </Grid>
       </Container>
