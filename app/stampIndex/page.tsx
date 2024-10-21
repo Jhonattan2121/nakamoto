@@ -143,14 +143,13 @@ const StampIndex = () => {
             <SimpleGrid columns={[2, 3, 4, 5]} spacing={1} >
                 {StampIndexData.map((artist, index) => (
                     <VStack
-                    key={index}
-                    textAlign="center"
-                    spacing={4}
-                    justifyContent="flex-start" 
-                    alignItems="center"
-                    position="relative"
+                        key={index}
+                        textAlign="center"
+                        spacing={4}
+                        justifyContent="flex-start"
+                        alignItems="center"
+                        position="relative"
                     >
-                        {/* Imagem */}
                         <Box
                             borderRadius="full"
                             overflow="hidden"
@@ -172,9 +171,7 @@ const StampIndex = () => {
                             />
                         </Box>
 
-                        {/* Pontos Verticais */}
                         <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                            {/* Adiciona os pontos verticalmente */}
                             {new Array(artist.dots || 5).fill(null).map((_, dotIndex) => (
                                 <Text key={dotIndex} display="block" color="gray.500">
                                     •
@@ -182,18 +179,14 @@ const StampIndex = () => {
                             ))}
                         </Box>
 
-                        {/* Título */}
                         <Text fontWeight="bold" textAlign="center">
                             {artist.title}
                         </Text>
 
-                        {/* Descrição */}
                         <Text textAlign="center" >
-                        {artist.description}
+                            {artist.description}
                         </Text>
 
-
-                        {/* Nome */}
                         <Text color="cyan.400" fontWeight="bold" textAlign="center">
                             {artist.name}
                         </Text>
@@ -206,9 +199,17 @@ const StampIndex = () => {
                 display={["flex", "none"]}
                 leftIcon={<MdMenu />}
                 colorScheme="teal"
+                size="lg"
                 onClick={onOpen}
                 mb={4}
-            />
+                borderRadius="md"
+                boxShadow="lg"
+                _hover={{ bg: "teal.600", transform: "scale(1.05)" }}
+                _active={{ transform: "scale(0.95)" }}
+            >
+                Open Menu
+            </Button>
+
             <Flex
                 mt={12}
                 flexDirection={["column", "row"]}
