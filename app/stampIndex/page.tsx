@@ -194,8 +194,8 @@ const StampIndex = () => {
                 ))}
             </SimpleGrid>
 
-
-            <Button
+          <Center>
+          <Button
                 display={["flex", "none"]}
                 leftIcon={<MdMenu />}
                 colorScheme="teal"
@@ -209,6 +209,7 @@ const StampIndex = () => {
             >
                 Open Menu
             </Button>
+          </Center>
 
             <Flex
                 mt={12}
@@ -365,12 +366,13 @@ const StampIndex = () => {
                 </Box>
             </Flex>
 
-
-            <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+            <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="lg">
                 <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerHeader>Select an Index</DrawerHeader>
-                    <DrawerBody>
+                <DrawerContent bg="gray.900">
+                    <DrawerHeader borderBottomWidth="1px" color="white" bg="green.600" p={4}>
+                        <Text fontSize="xl" fontWeight="bold">Select an Index</Text>
+                    </DrawerHeader>
+                    <DrawerBody p={4}>
                         {epochs.length > 0 ? (
                             epochs.map((epoch, epochIndex) => (
                                 <Box key={epochIndex} mb={4}>
@@ -383,6 +385,12 @@ const StampIndex = () => {
                                                 key={index}
                                                 cursor="pointer"
                                                 onClick={() => handleIndexClick(index)}
+                                                border="1px solid transparent"
+                                                borderRadius="md"
+                                                _hover={{ borderColor: "green.400", bg: "green.700", color: "white" }}
+                                                p={2}
+                                                color="white"
+                                                bg="gray.800"
                                             >
                                                 <ListIcon as={MdCheckCircle} color="green.500" />
                                                 {index}
@@ -392,12 +400,19 @@ const StampIndex = () => {
                                 </Box>
                             ))
                         ) : (
-                            <Text>Loading epochs...</Text>
+                            <Text color="gray.300">Loading epochs...</Text>
                         )}
                     </DrawerBody>
                     <DrawerFooter>
-                        <Button colorScheme="blue" onClick={onClose}>
-                            Close
+                        <Button
+                            colorScheme="blue"
+                            size="lg"
+                            onClick={onClose}
+                            variant="outline"
+                            color="white"
+                            _hover={{ bg: "blue.600", color: "white" }}
+                        >
+                            Fechar
                         </Button>
                     </DrawerFooter>
                 </DrawerContent>
