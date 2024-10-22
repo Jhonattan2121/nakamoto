@@ -124,17 +124,18 @@ export default function Home() {
                           <Image
                             src={imageUrl}
                             alt={`Image ${index}`}
-                            objectFit="cover"
+                            objectFit="contain"
                             width="100%"
                             height="auto"
                             maxHeight={isWideImage ? "400px" : "300px"}
+
                             borderRadius="lg"
                           />
                         </Box>
                       </Center>
                     </CardBody>
-                    <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="bold">STAMP #{product.stamp}</Text>
-                    <Text fontSize={{ base: 'sm', md: 'md' }}>{product.name}</Text>
+                    <Text fontSize={{ base: 'x-large', md: 'md' }} fontWeight="bold">STAMP #{product.stamp}</Text>
+                    <Text fontSize={{ base: 'x-large', md: 'md' }}>{product.name}</Text>
                   </Card>
 
                   {/* Card Verso */}
