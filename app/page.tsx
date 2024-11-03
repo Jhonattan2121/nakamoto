@@ -24,10 +24,10 @@ export default function Home() {
           justify="space-between"
           flexDirection={{ base: 'column', md: 'row' }}
           textAlign={{ base: 'center', md: 'left' }}
-
+          mb={12}
         >
           <Text
-            fontSize={{ base: 'lg', md: '2xl' }}
+            fontSize={{ base: 'lg', md: 'xx-large' }}
             fontWeight="bold"
             mb={{ base: 4, md: 0 }}
             flex={1}
@@ -38,7 +38,7 @@ export default function Home() {
           <Image
             src="/burnHead.svg"
             alt="Nakamoto"
-            boxSize={{ base: "160px", md: "240px" }}
+            boxSize={{ base: "160px", md: "300px" }}
             transition="transform 0.3s ease"
             _hover={{ transform: "scale(1.05)" }}
             mb={{ base: 4, md: 0 }}
@@ -66,7 +66,7 @@ export default function Home() {
         </Center>
 
 
-        <Text fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" textAlign="center" mb={8}>
+        <Text fontSize={{ base: 'xl', md: 'xxx-large' }} fontWeight="bold"  mb={8}>
           STAMP Artworks
         </Text>
 
@@ -103,7 +103,6 @@ export default function Home() {
                   style={{ perspective: "1000px" }}
                   mb={6}
                 >
-                  {/* Card Frente */}
                   <Card
                     sx={{
                       transition: "transform 1.1s",
@@ -112,11 +111,9 @@ export default function Home() {
                       height: "100%",
                       backfaceVisibility: "hidden",
                       overflow: "hidden",
-                      borderRadius: "lg",
                     }}
                     bg="transparent"
                     size="sm"
-                    color="white"
                   >
                     <CardBody bg={"transparent"}>
                       <Center>
@@ -135,7 +132,7 @@ export default function Home() {
                       </Center>
                     </CardBody>
                     <Text fontSize={{ base: 'x-large', md: 'md' }} fontWeight="bold">STAMP #{product.stamp}</Text>
-                    <Text fontSize={{ base: 'x-large', md: 'md' }}>{product.name}</Text>
+                    <Text fontSize={{ base: 'x-large', md: 'md' }} fontWeight="bold">Artist: {product.name}</Text>
                   </Card>
 
                   {/* Card Verso */}
@@ -150,7 +147,6 @@ export default function Home() {
                       top: 0,
                       left: 0,
                       overflow: "hidden",
-                      borderRadius: "lg",
                     }}
                     bg="transparent"
                     size="sm"
@@ -187,41 +183,45 @@ export default function Home() {
         </Grid>
 
         <Flex justify="center">
-          <Button
-            onClick={onOpen}
-            variant="outline"
-            colorScheme="teal"
-            size="lg"
-            fontWeight="bold"
-            mb={12}
-          >
-            Submit Art
-          </Button>
+          <Box textAlign="center" mb={12}>
+            <Text
+              onClick={onOpen}
+              as="span"
+              fontSize="xx-large"
+              fontWeight="bold"
+            >
+              Submit Art
+            </Text>
+            <Box
+              height="5px"
+              bg="green"
+              width="100%"
+
+            />
+          </Box>
         </Flex>
+
 
         <SubmitFormModal isOpen={isOpen} onClose={onClose} />
       </Container>
 
       <Container maxW="container.xl" py={12}>
+
         <Text
-          fontSize={{ base: 'xl', md: '2xl' }}
-          fontWeight="bold"
+          fontSize={{ base: 'xl', md: 'xxx-large' }}
+
           mb={8}
-          color="lightgreen"
         >
-          Whats new in STAMPS...
+          What&apos;s new in STAMPS...
         </Text>
 
         <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={10}>
           <GridItem>
-            <Text fontSize="lg" mb={4}>
-              <strong>STAMPS Artworks showcasing in Pepe in Bali August 2024</strong>
-              <br />
-              The Pepe in Bali Exhibition at the Superlative Gallery in Bali showcases Pepe art from August 11th to August 24th, 2024.
-              The event features diverse Pepe interpretations in Bali, focusing on digital art and technology, with involvement from curators, collaborators, and the Pepe community.
-            </Text>
+            <Text fontSize={{ base: 'xl', md: 'large' }} mb={5}>STAMPS Artworks showcasing in Pepe in Bali August 2024</Text>
+            <Text fontSize={{ base: 'xl', md: 'large' }}>
+  The &quot;Pepe in Bali Exhibition&quot; at the Superlative Gallery in Bali showcases Pepe art from August 11th to August 24th, 2024. It educates on Pepe&apos;s cultural significance, digital art history, and engages with the Pepe and internet culture community. The event features diverse Pepe interpretations in Bali, focusing on digital art and technology, with involvement from curators, collaborators, and the Pepe community. Held in Bali, known for digital art, the exhibition highlights the intersection of art, technology, and meme culture.
+</Text>
 
-            {/* Grid de imagens apenas no desktop */}
             <Grid
               display={{ base: "none", md: "grid" }}
               templateAreas={{
@@ -250,35 +250,25 @@ export default function Home() {
           </GridItem>
 
           <GridItem>
-            <Image src="/Pepe in Bali.png" alt="Beeple PepeFest" mb={4} borderRadius="md" />
-            <Text fontSize="lg">
-              <strong>STAMPS invading Beeple PepeFest August 2024</strong>
-              <br />
+            <Image src="/Pepe in Bali.png" alt="Beeple PepeFest" mb={6} borderRadius="md" />
+            <Text fontSize={{ base: 'xl', md: 'x-large' }}>STAMPS invading Beeple PepeFest August 2024</Text>
+            <Text fontSize={{ base: 'xl', md: 'x-large' }}>
               PepeFest at Beeple Studios was a community-led celebration of all things Pepe.
             </Text>
           </GridItem>
         </Grid>
-
-        {/* Grid de imagens no mobile */}
         <Grid
           display={{ base: "grid", md: "none" }}
           gridTemplateColumns="1fr"
-
-
           gap={4}
           mt={8}
         >
-
-
           <GridItem position="relative"
           >
             <Image src="/11.png" alt="Pepe in Bali Exhibition" borderRadius="md" />
           </GridItem>
         </Grid>
       </Container>
-
-
-
     </Box>
   );
 }

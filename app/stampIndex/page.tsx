@@ -54,6 +54,7 @@ const StampIndex = () => {
     const [loading, setLoading] = useState(true);
     const [ilsData, setIlsData] = useState<Record<string, StampDetail[]>>({});
     const [flippedIndex, setFlippedIndex] = useState<null | number>(null);
+    const [activeIndex, setActiveIndex] = useState<string | null>(null);
 
     const handleCardClick = (index: number) => {
         setFlippedIndex(flippedIndex === index ? null : index);
@@ -120,6 +121,7 @@ const StampIndex = () => {
     }, [epochs, ilsData, selectedIndex]);
 
     const handleIndexClick = (index: string) => {
+        setActiveIndex(index);
         setSelectedIndex(index);
         onClose();
 
@@ -129,6 +131,7 @@ const StampIndex = () => {
         console.log(filteredStamps);
     };
 
+
     const handleEpochClick = (epoch: string) => {
         setSelectedEpoch(epoch);
         console.log(epoch)
@@ -136,11 +139,11 @@ const StampIndex = () => {
 
     return (
         <Box p={5} mb={10} borderColor="brown" borderRadius="md" color="white" maxW="1500px" mx="auto">
-            <Text fontSize={["xl", "2xl"]} fontWeight="bold" mb={4} textAlign="center">
+            <Text fontSize={["xl", "xx-large"]} fontWeight="bold" mb={4} textAlign="center">
                 Nakamoto STAMP Index Timeline
             </Text>
 
-            <SimpleGrid columns={[2, 3, 4, 5]} spacing={1} >
+            <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing={4}>
                 {StampIndexData.map((artist, index) => (
                     <VStack
                         key={index}
@@ -149,11 +152,14 @@ const StampIndex = () => {
                         justifyContent="flex-start"
                         alignItems="center"
                         position="relative"
+
+                        p={4}
+
                     >
                         <Box
                             borderRadius="full"
                             overflow="hidden"
-                            boxSize="150px"
+                            boxSize={["150px", "200px"]}
                             border="2px solid white"
                             display="flex"
                             justifyContent="center"
@@ -162,8 +168,8 @@ const StampIndex = () => {
                             <Image
                                 src={artist.imageUrl}
                                 alt={artist.title}
-                                width={150}
-                                height={150}
+                                width={["150", "200"]}
+                                height={["150", "200"]}
                                 objectFit="cover"
                                 style={{
                                     imageRendering: "pixelated",
@@ -179,37 +185,39 @@ const StampIndex = () => {
                             ))}
                         </Box>
 
-                        <Text fontWeight="bold" textAlign="center">
+                        <Text fontSize={{ base: 'lg', md: 'xl' }} fontWeight="bold" textAlign="center" noOfLines={2}>
                             {artist.title}
                         </Text>
 
-                        <Text textAlign="center" >
+                        <Text fontSize={{ base: 'sm', md: 'md' }} textAlign="center" noOfLines={3} minH="60px">
                             {artist.description}
                         </Text>
 
-                        <Text color="cyan.400" fontWeight="bold" textAlign="center">
+                        <Text fontSize={{ base: 'lg', md: 'xl' }} color="cyan.400" textAlign="center" noOfLines={1}>
                             {artist.name}
                         </Text>
+
                     </VStack>
                 ))}
             </SimpleGrid>
 
-          <Center>
-          <Button
-                display={["flex", "none"]}
-                leftIcon={<MdMenu />}
-                colorScheme="teal"
-                size="lg"
-                onClick={onOpen}
-                mb={4}
-                borderRadius="md"
-                boxShadow="lg"
-                _hover={{ bg: "teal.600", transform: "scale(1.05)" }}
-                _active={{ transform: "scale(0.95)" }}
-            >
-                Open Menu
-            </Button>
-          </Center>
+
+            <Center>
+                <Button
+                    display={["flex", "none"]}
+                    leftIcon={<MdMenu />}
+                    colorScheme="teal"
+                    size="lg"
+                    onClick={onOpen}
+                    mb={4}
+                    borderRadius="md"
+                    boxShadow="lg"
+                    _hover={{ bg: "teal.600", transform: "scale(1.05)" }}
+                    _active={{ transform: "scale(0.95)" }}
+                >
+                    Open Menu
+                </Button>
+            </Center>
 
             <Flex
                 mt={12}
@@ -232,6 +240,7 @@ const StampIndex = () => {
                                     mb={2}
                                     cursor="pointer"
                                     onClick={() => handleEpochClick(epoch.epoch_name)}
+                                    fontSize="large"
                                 >
                                     {epoch.epoch_name}
                                 </Text>
@@ -241,8 +250,18 @@ const StampIndex = () => {
                                             key={index}
                                             cursor="pointer"
                                             onClick={() => handleIndexClick(index)}
+                                            color={activeIndex === index ? "green.100" : "green.400"}
+                                            fontSize="lg"
                                         >
-                                            <ListIcon as={MdCheckCircle} color="green.500" />
+                                            <Box as="span" color="green.500" mr={2}>
+                                                <Box
+                                                    width="8px"
+                                                    height="8px"
+                                                    borderRadius="full"
+                                                    backgroundColor="green.500"
+                                                    display="inline-block"
+                                                />
+                                            </Box>
                                             {index}
                                         </ListItem>
                                     ))}
@@ -250,7 +269,7 @@ const StampIndex = () => {
                             </Box>
                         ))
                     ) : (
-                        <Text>Loading epochs...</Text>
+                        <Text color="green.400">Loading epochs...</Text>
                     )}
                 </Box>
 
@@ -269,7 +288,6 @@ const StampIndex = () => {
                                     mb={6}
                                     mx="auto"
                                 >
-                                    {/* Card Frente */}
                                     <Card
                                         sx={{
                                             transition: "transform 1.1s",
@@ -299,28 +317,23 @@ const StampIndex = () => {
                                                 </Box>
                                             </Center>
 
-                                            <Box textAlign="center" >
-
-
-                                                <Text color="white"  >
+                                            <Box textAlign="center">
+                                                <Text color="white">
                                                     <strong>index</strong> {stamp.epoch_index}
                                                 </Text>
-                                                <Text color="white"
-                                                >
+                                                <Text color="white">
                                                     <strong>Stamp</strong> {stamp.STAMP_Asset}
                                                 </Text>
-                                                <Text color="white" >
+                                                <Text color="white">
                                                     <strong>Artist:</strong> {stamp.Creator_Name}
                                                 </Text>
-                                                <Text color="white" >
+                                                <Text color="white">
                                                     <strong> Rarity Score:</strong> {stamp.Rarity_Score}
                                                 </Text>
                                             </Box>
                                         </CardBody>
-
                                     </Card>
 
-                                    {/* Card Verso */}
                                     <Card
                                         sx={{
                                             transition: "transform 1.1s",
@@ -333,7 +346,7 @@ const StampIndex = () => {
                                         bg={"black"}
                                         border={"2px solid limegreen"}
                                         size="sm"
-                                        color={"white"}
+                                        color={"green.400"}
                                         boxShadow="md"
                                     >
                                         <CardHeader
@@ -343,7 +356,7 @@ const StampIndex = () => {
                                             bg="gray.800"
                                             p={2}
                                         >
-                                            <Text size="md" color="white">Additional Info</Text>
+                                            <Text size="md" color="green.400">Additional Info</Text>
                                         </CardHeader>
                                         <CardBody textAlign="center" width="100%" height="100%" borderRadius="20px">
                                             <Text color="gray.400">This is the back of the card.</Text>
@@ -365,6 +378,7 @@ const StampIndex = () => {
                     </SimpleGrid>
                 </Box>
             </Flex>
+
 
             <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="lg">
                 <DrawerOverlay />
@@ -412,7 +426,7 @@ const StampIndex = () => {
                             color="white"
                             _hover={{ bg: "blue.600", color: "white" }}
                         >
-                            Fechar
+                            To close
                         </Button>
                     </DrawerFooter>
                 </DrawerContent>
